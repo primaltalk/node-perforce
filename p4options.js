@@ -11,6 +11,21 @@ module.exports = {
     type: String,
     category: 'stdin'
   },
+  clientworkspace: {
+    cmd: 'Client:',
+    type: String,
+    category: 'stdin'
+  },
+  clientroot: {
+    cmd: 'Root:',
+    type: String,
+    category: 'stdin'
+  },
+  clientview: {
+    cmd: 'View:',
+    type: String,
+    category: 'stdin'
+  },
   acceptmerged: {
     cmd: '-am',
     category: 'unary'
