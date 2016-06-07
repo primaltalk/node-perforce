@@ -20,7 +20,7 @@ function optionBuilder(options) {
       if ((options[option] || {}).constructor !== p4option.type) return;
     }
     if (p4option.category === 'stdin') {
-      results.stdin.push(p4option.cmd + options[option]);
+      results.stdin.push(p4option.cmd + ' ' + options[option]);
       if (results.args.indexOf('-i') < 0) results.args.push('-i');
     } else if (p4option.cmd) {
       results.args.push(p4option.cmd);
@@ -68,7 +68,15 @@ function execP4(p4cmd, options, callback) {
   var cmd = [p4, p4cmd, ob.args.join(' '), ob.files.join(' ')];
   var child = exec(cmd.join(' '), childProcessOptions, function (err, stdout, stderr) {
     if (err) return callback(err);
-    if (stderr) return callback(new Error(stderr));
+    if (stderr) {
+      console.log('STDERR: "' + stderr + '"');
+      // Need to trap where a sync is executed but the files are up to date, which
+      // is not in and of itself an error.
+      if(stderr.indexOf('File(s) up-to-date.') >= 0) {
+        return callback(null, stderr);
+      }
+      return callback(new Error(stderr));
+    }
     return callback(null, stdout);
   });
   if (ob.stdin.length > 0) {

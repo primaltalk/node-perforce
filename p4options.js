@@ -26,6 +26,11 @@ module.exports = {
     type: String,
     category: 'stdin'
   },
+  clientowner: {
+    cmd: 'Owner:',
+    type: String,
+    category: 'stdin'
+  },
   acceptmerged: {
     cmd: '-am',
     category: 'unary'
