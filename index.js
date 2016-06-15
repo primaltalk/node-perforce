@@ -172,9 +172,10 @@ NodeP4.prototype.changelist = {
     });
   },
   submit: function (options, callback) {
-    if (!options || !options.changelist) return callback(new Error('Missing parameter/argument'));
+    if (!options) return callback(new Error('Missing parameter/argument'));
     execP4('submit', options, function (err, stdout) {
       if (err) return callback(err);
+      return callback(null, stdout);
     });
   }
 };

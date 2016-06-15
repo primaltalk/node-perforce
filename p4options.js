@@ -11,6 +11,11 @@ module.exports = {
     type: String,
     category: 'stdin'
   },
+  _description: {
+    cmd: '-d',
+    type: String,
+    category: 'mixed'
+  }
   clientworkspace: {
     cmd: 'Client:',
     type: String,
