@@ -15,7 +15,7 @@ module.exports = {
     cmd: '-d',
     type: String,
     category: 'mixed'
-  }
+  },
   clientworkspace: {
     cmd: 'Client:',
     type: String,
