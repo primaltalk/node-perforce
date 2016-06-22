@@ -300,7 +300,8 @@ NodeP4.prototype.users = function (options, callback) {
 var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
                       'diff', 'reconcile', 'reopen', 'resolved',
                       'shelve', 'unshelve', 'client', 'resolve',
-                      'submit', 'set', 'depots', 'depot', 'files'];
+                      'submit', 'set', 'depots', 'depot', 'files',
+                      'streams'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
     execP4(command, options, callback);

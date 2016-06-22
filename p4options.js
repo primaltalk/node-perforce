@@ -36,6 +36,11 @@ module.exports = {
     type: String,
     category: 'stdin'
   },
+  clientstream: {
+    cmd: 'Stream:',
+    type: String,
+    category: 'stdin'
+  }
   acceptmerged: {
     cmd: '-am',
     category: 'unary'
