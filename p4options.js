@@ -40,7 +40,7 @@ module.exports = {
     cmd: 'Stream:',
     type: String,
     category: 'stdin'
-  }
+  },
   acceptmerged: {
     cmd: '-am',
     category: 'unary'
