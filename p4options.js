@@ -131,5 +131,10 @@ module.exports = {
     cmd: ' ',
     type: String,
     category: 'mixed'
+  },
+  submitoption: {
+    cmd: '-f',
+    type: String,
+    category: 'mixed'
   }
 };
