@@ -26,6 +26,11 @@ module.exports = {
     type: String,
     category: 'stdin'
   },
+  altroots: {
+    cmd: 'AltRoots:',
+    type: String,
+    category: 'stdin'
+  },
   clientview: {
     cmd: 'View:',
     type: String,
