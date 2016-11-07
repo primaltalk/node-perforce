@@ -72,8 +72,10 @@ function execP4(p4cmd, options, callback) {
       console.log('STDERR: "' + stderr + '"');
       // Need to trap where a sync is executed but the files are up to date, which
       // is not in and of itself an error.  Ditto for files not open on this client.
+      // Also if no streams are found.
       if(stderr.indexOf('File(s) up-to-date.') >= 0
-         || stderr.indexOf('File(s) not opened on this client.') >= 0) {
+         || stderr.indexOf('File(s) not opened on this client.') >= 0
+         || stderr.indexOf('no such stream') >= 0) {
         return callback(null, stderr);
       }
       return callback(new Error(stderr));
