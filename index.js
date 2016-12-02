@@ -75,7 +75,8 @@ function execP4(p4cmd, options, callback) {
       // Also if no streams are found.
       if(stderr.indexOf('File(s) up-to-date.') >= 0
          || stderr.indexOf('File(s) not opened on this client.') >= 0
-         || stderr.indexOf('no such stream') >= 0) {
+         || stderr.indexOf('no such stream') >= 0
+         || stderr.indexOf('No files to submit') >= 0) {
         return callback(null, stderr);
       }
       return callback(new Error(stderr));
