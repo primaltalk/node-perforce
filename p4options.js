@@ -141,5 +141,9 @@ module.exports = {
     cmd: '-f',
     type: String,
     category: 'mixed'
+  },
+  quiet: {
+    cmd: '-q',
+    category: 'unary'
   }
 };
