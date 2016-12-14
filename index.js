@@ -12,7 +12,7 @@ var p4 = process.platform === 'win32'? 'p4.exe' : 'p4';
 function optionBuilder(options) {
   options = options || {};
 
-  var results = {stdin: [], args: [], files: []};
+  var results = {stdin: [], args: [], files: [], globals: [], interactive: []};
   Object.keys(options).map(function (option) {
     var p4option = p4options[option];
     if (!p4option) return;
@@ -22,9 +22,16 @@ function optionBuilder(options) {
     if (p4option.category === 'stdin') {
       results.stdin.push(p4option.cmd + ' ' + options[option]);
       if (results.args.indexOf('-i') < 0) results.args.push('-i');
+    } else if (p4option.category === 'interactive') {
+      results.interactive.push(options[option]);
     } else if (p4option.cmd) {
-      results.args.push(p4option.cmd);
-      if (p4option.category === 'mixed') results.args.push(options[option]);
+      if(p4option.global) {
+        results.globals.push(p4option.cmd);
+        if (p4option.category === 'mixed') results.globals.push(options[option]);
+      } else {
+        results.args.push(p4option.cmd);
+        if (p4option.category === 'mixed') results.args.push(options[option]);
+      }
     } else {
       results.files = results.files.concat(options[option]);
     }
@@ -65,14 +72,14 @@ function execP4(p4cmd, options, callback) {
 
   var ob = optionBuilder(options);
   var childProcessOptions = execOptionBuilder(options);
-  var cmd = [p4, p4cmd, ob.args.join(' '), ob.files.join(' ')];
+  var cmd = [p4, ob.globals.join(' '), p4cmd, ob.args.join(' '), ob.files.join(' ')];
   var child = exec(cmd.join(' '), childProcessOptions, function (err, stdout, stderr) {
     if (err) return callback(err);
     if (stderr) {
       console.log('STDERR: "' + stderr + '"');
       // Need to trap where a sync is executed but the files are up to date, which
       // is not in and of itself an error.  Ditto for files not open on this client.
-      // Also if no streams are found.
+      // Also for reverting where there are no files to submit.
       if(stderr.indexOf('File(s) up-to-date.') >= 0
          || stderr.indexOf('File(s) not opened on this client.') >= 0
          || stderr.indexOf('no such stream') >= 0
@@ -83,8 +90,11 @@ function execP4(p4cmd, options, callback) {
     }
     return callback(null, stdout);
   });
-  if (ob.stdin.length > 0) {
+  if (ob.stdin.length || ob.interactive.length > 0) {
     ob.stdin.forEach(function (line) {
+      child.stdin.write(line + '\n');
+    });
+    ob.interactive.forEach(function(line) {
       child.stdin.write(line + '\n');
     });
     child.stdin.emit('end');
@@ -115,7 +125,8 @@ NodeP4.prototype.changelist = {
     }
     var newOptions = {
       _change: 'new',
-      description: options.description || '<saved by node-perforce>'
+      description: options.description || '<saved by node-perforce>',
+      env: options.env || process.env
     };
     execP4('change', newOptions, function (err, stdout) {
       if (err) return callback(err);
@@ -130,7 +141,8 @@ NodeP4.prototype.changelist = {
     if (!options.description) return callback();
     var newOptions = {
       _change: options.changelist.toString(),
-      description: options.description
+      description: options.description,
+      env: options.env || process.env
     };
     execP4('change', newOptions, function (err) {
       if (err) return callback(err);
@@ -140,14 +152,22 @@ NodeP4.prototype.changelist = {
   delete: function (options, callback) {
     callback = callback || function(){};
     if (!options || !options.changelist) return callback(new Error('Missing parameter/argument'));
-    execP4('change', {_delete: options.changelist}, function (err) {
+    var newOptions = {
+      _delete: options.changelist,
+      env: options.env || process.env
+    };
+    execP4('change', newOptions, function (err) {
       if (err) return callback(err);
       return callback();
     });
   },
   view: function (options, callback) {
     if (!options || !options.changelist) return callback(new Error('Missing parameter/argument'));
-    execP4('change', {_output: options.changelist}, function (err, stdout) {
+    var newOptions = {
+      _output: options.changelist,
+      env: options.env || process.env
+    };
+    execP4('change', newOptions, function (err, stdout) {
       if (err) return callback(err);
 
       // preprocessing file status
@@ -304,7 +324,7 @@ var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
                       'diff', 'reconcile', 'reopen', 'resolved',
                       'shelve', 'unshelve', 'client', 'resolve',
                       'submit', 'set', 'depots', 'depot', 'files',
-                      'streams'];
+                      'streams', 'configure', 'login'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
     execP4(command, options, callback);

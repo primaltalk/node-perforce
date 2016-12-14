@@ -108,7 +108,8 @@ module.exports = {
   client: {
     cmd: '-c',
     type: String,
-    category: 'mixed'
+    category: 'mixed',
+    global: true
   },
   long: {
     cmd: '-l',
@@ -130,7 +131,8 @@ module.exports = {
   user: {
     cmd: '-u',
     type: String,
-    category: 'mixed'
+    category: 'mixed',
+    global: true
   },
   custom: {
     cmd: ' ',
@@ -145,5 +147,37 @@ module.exports = {
   quiet: {
     cmd: '-q',
     category: 'unary'
+  },
+  keep: {
+    cmd: '-k',
+    category: 'unary'
+  },
+  parallel: {
+    cmd: '--parallel',
+    type: String,
+    category: 'mixed'
+  },
+  host: {
+    cmd: '-H',
+    type: String,
+    category: 'mixed',
+    global: true
+  },
+  port: {
+    cmd: '-p',
+    type: String,
+    category: 'mixed',
+    global: true
+  },
+  pass: {
+    cmd: '-P',
+    type: String,
+    category: 'mixed',
+    global: true
+  },
+  password: {
+    cmd: '',
+    type: String,
+    category: 'interactive'
   }
 };
