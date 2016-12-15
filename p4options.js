@@ -146,7 +146,8 @@ module.exports = {
   },
   quiet: {
     cmd: '-q',
-    category: 'unary'
+    category: 'unary',
+    global: true
   },
   keep: {
     cmd: '-k',
