@@ -324,7 +324,7 @@ var commonCommands = ['add', 'delete', 'edit', 'revert', 'sync',
                       'diff', 'reconcile', 'reopen', 'resolved',
                       'shelve', 'unshelve', 'client', 'resolve',
                       'submit', 'set', 'depots', 'depot', 'files',
-                      'streams', 'configure', 'login'];
+                      'streams', 'configure', 'login', 'status'];
 commonCommands.forEach(function (command) {
   NodeP4.prototype[command] = function (options, callback) {
     execP4(command, options, callback);

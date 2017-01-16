@@ -50,6 +50,14 @@ module.exports = {
     cmd: '-am',
     category: 'unary'
   },
+  add: {
+    cmd: '-a',
+    category: 'unary'
+  },
+  edit: {
+    cmd: '-e',
+    category: 'unary'
+  },
   delete: {
     cmd: '-d',
     category: 'unary'
@@ -180,5 +188,9 @@ module.exports = {
     cmd: '',
     type: String,
     category: 'interactive'
+  },
+  exclude: {
+    cmd: '-e',
+    category: 'unary'
   }
 };
