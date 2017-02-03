@@ -80,10 +80,12 @@ function execP4(p4cmd, options, callback) {
       // Need to trap where a sync is executed but the files are up to date, which
       // is not in and of itself an error.  Ditto for files not open on this client.
       // Also for reverting where there are no files to submit.
-      if(stderr.indexOf('File(s) up-to-date.') >= 0
-         || stderr.indexOf('File(s) not opened on this client.') >= 0
-         || stderr.indexOf('no such stream') >= 0
-         || stderr.indexOf('No files to submit') >= 0) {
+      if(stderr.toLowerCase().indexOf('file(s) up-to-date.') >= 0
+         || stderr.toLowerCase().indexOf('file(s) not opened on this client.') >= 0
+         || stderr.toLowerCase().indexOf('no such stream') >= 0
+         || stderr.toLowerCase().indexOf('no such file(s)') >= 0
+         || stderr.toLowerCase().indexOf('no file(s) to reconcile.') >= 0
+         || stderr.toLowerCase().indexOf('no files to submit') >= 0) {
         return callback(null, stderr);
       }
       return callback(new Error(stderr));
