@@ -41,6 +41,11 @@ module.exports = {
     type: String,
     category: 'stdin'
   },
+  clientoptions: {
+    cmd: 'Options:',
+    type: String,
+    category: 'stdin'
+  },
   clientstream: {
     cmd: 'Stream:',
     type: String,
@@ -191,6 +196,10 @@ module.exports = {
   },
   exclude: {
     cmd: '-e',
+    category: 'unary'
+  },
+  noaction: {
+    cmd: '-n',
     category: 'unary'
   }
 };
