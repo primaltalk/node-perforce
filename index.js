@@ -82,6 +82,7 @@ function execP4(p4cmd, options, callback) {
       // Also for reverting where there are no files to submit.
       if(stderr.toLowerCase().indexOf('file(s) up-to-date.') >= 0
          || stderr.toLowerCase().indexOf('file(s) not opened on this client.') >= 0
+         || stderr.toLowerCase().indexOf('no file(s) at that revision.') >= 0
          || stderr.toLowerCase().indexOf('no such stream') >= 0
          || stderr.toLowerCase().indexOf('no such file(s)') >= 0
          || stderr.toLowerCase().indexOf('no file(s) to reconcile.') >= 0
